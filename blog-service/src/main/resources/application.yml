@@ -1,0 +1,38 @@
+server:
+  port: 6969
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${database.host}:${database.port}/${database.name}
+    username: ${database.user}
+    password: ${database.password}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        temp.use_jdbc_metadata_defaults: false
+        format_sql: true
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://${database.host}:${database.port}/${database.name}
+    user: ${database.user}
+    password: ${database.password}
+    locations: classpath:db/migration
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+  level:
+    org.springframework.web: INFO
+    org:
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type.descriptor.sql: TRACE
+    com.ngockhuong.services.blog: DEBUG

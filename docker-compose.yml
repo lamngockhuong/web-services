@@ -1,0 +1,30 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: blog
+      POSTGRES_USER: ngockhuong
+      POSTGRES_PASSWORD: ngockhuong
+      TZ: "Asia/Ho_Chi_Minh"
+    ports:
+      - "55432:5432"
+    volumes:
+      - ./data/postgresql/data:/var/lib/postgresql/data
+  blog-service:
+    build:
+      context: blog-service
+    image: ngockhuong/blog-service
+    container_name: blog-service
+    environment:
+      DATABASE_HOST: db
+    ports:
+      - "9696:6969"
+      - "8787:8787"
+    links:
+      - db
+    depends_on:
+      - db
+    volumes:
+      - ./data/storage/blog:/storage/blog
